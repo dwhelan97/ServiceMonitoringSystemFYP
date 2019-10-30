@@ -1,0 +1,5 @@
+30/10/2019 Week 44: 
+
+The last few days i have been in contact with Mchales to further nail down what they would like to get from this FYP.
+Next step for this week is to connect Esp32 and start getting used to using it. Going on from this I plan to start 
+reading "Dummy" Can hex values from a csv file in the coming days...
