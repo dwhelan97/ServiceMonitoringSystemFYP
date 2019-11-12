@@ -1,35 +1,36 @@
 #include "SPIFFS.h"
-String incomingstring;
+//String incomingstring;
+//PrintToFAT();
+//void PrintToFat(incomingstring);
 void setup() {
-Serial.begin(115200);
-
+Serial.begin(115200); 
+ Serial.print("Enter what youd like to store and press enter: ");
+}
+void loop() {
+ String incomingstring;
  
-  if (!SPIFFS.begin(true)) {
+  if(Serial.available()>0){
+  incomingstring = Serial.readString();
+
+   if (!SPIFFS.begin(true)) {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
- 
   File file = SPIFFS.open("/test.txt", FILE_WRITE);
  
   if (!file) {
     Serial.println("There was an error opening the file for writing");
     return;
   }
-  if (file.print("CAN DATA\r\n")) {
-    Serial.println("File was written");
-  } else {
-    Serial.println("File write failed");
-  }
-  String Data;
-  Data = "Hello This is my Data\r\nIm just testing";
-  if (file.print(Data)) {
+  if (file.print(incomingstring)) {
     Serial.println("File was written\r\n");
   } else {
     Serial.println("File write failed\r\n");
   }
- 
-  file.close();
-
+    file.close();
+  
+  Serial.print("Going into READ");
+  //void ReadFAT();
   File file2 = SPIFFS.open("/test.txt");
  
     if(!file2){
@@ -46,14 +47,23 @@ Serial.begin(115200);
  
     file2.close();
 }
-  
-
-
-void loop() {
- if(Serial.available()>0){
-  incomingstring = Serial.readString();
-  Serial.print("\r\nRECEIVED: ");
-  Serial.print(incomingstring);
- }
-
 }
+  
+  
+//void ReadFAT(){
+//  File file2 = SPIFFS.open("/test.txt");
+// 
+//    if(!file2){
+//        Serial.println("Failed to open file for reading");
+//        return;
+//    }
+// 
+//    Serial.println("File Content:");
+// 
+//    while(file2.available()){
+// 
+//        Serial.write(file2.read());
+//    }
+// 
+//    file2.close();
+//}
