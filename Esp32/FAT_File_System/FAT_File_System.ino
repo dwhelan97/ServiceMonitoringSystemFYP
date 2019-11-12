@@ -1,3 +1,5 @@
+//Reference:
+//https://techtutorialsx.com/2018/08/05/esp32-arduino-spiffs-reading-a-file/
 #include "SPIFFS.h"
 //String incomingstring;
 //PrintToFAT();
