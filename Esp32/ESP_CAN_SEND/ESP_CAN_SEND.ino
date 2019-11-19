@@ -30,7 +30,7 @@ void loop() {
       else{
         printf(" from 0x%08x, DLC %d\n",rx_frame.MsgID,  rx_frame.FIR.B.DLC);
         for(int i = 0; i < 8; i++){
-          printf("%c\t", (char)rx_frame.data.u8[i]);
+          printf("%c", (char)rx_frame.data.u8[i]);
         }
         printf("\n");
       }
@@ -49,7 +49,8 @@ void loop() {
       rx_frame.data.u8[6] = 'a';
       rx_frame.data.u8[7] = 'n';
 
-      
+      printf("Sending hellocan \n");
       ESP32Can.CANWriteFrame(&rx_frame);
     }
+    delay(1000);
 }
