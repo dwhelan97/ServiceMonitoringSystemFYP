@@ -1,0 +1,27 @@
+30/10/2019 Week 44: 
+
+The last few days i have been in contact with Mchales to further nail down what they would like to get from this FYP.
+Next step for this week is to connect Esp32 and start getting used to using it. Going on from this I plan to start 
+reading "Dummy" Can hex values from a csv file in the coming days...
+
+30/10/2019 Github Initialised.
+
+05/11/2019 week 45: 
+Two more questions asked of McHales...
+1.What CAN transceiver are you using? is there any libraries available?
+2.How do you test your communication between Isocan and the ECU?
+
+Starting today I am going to work with the Esp32 as this will be the medium to take in my CAN info and decipher it.
+
+12/11/2019 week 46:
+Today I received two CAN Transceivers from Amazon. I will begin usimg these by following the following tutorial: 
+http://www.iotsharing.com/2017/09/how-to-use-arduino-esp32-can-interface.html
+I believe this will be a good place to start...
+Plan is to aim to have the two esp32's talking for xmas with one being the slave and the other the master. This would be 
+good prototyping before I use an actual vehicle CAN Bus.
+
+19/11/2019 week 47:
+This morning I got two esp32's talking via CAN using SN65HVD230 CAN module. I followed the code used in this tutorial to get it working initially:
+http://www.iotsharing.com/2017/09/how-to-use-arduino-esp32-can-interface.html
+This tutorial sends over a lowercase string from one can to another.. this can then interprets the string and converts it to uppercase and then 
+sends it back.
