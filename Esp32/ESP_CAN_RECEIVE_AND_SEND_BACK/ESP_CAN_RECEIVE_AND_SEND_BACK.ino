@@ -1,5 +1,7 @@
-#include <ESP32CAN.h>
+#include <CAN.h>
 #include <CAN_config.h>
+#include <can_regdef.h>
+#include <ESP32CAN.h>
 
 CAN_device_t CAN_cfg;
 
