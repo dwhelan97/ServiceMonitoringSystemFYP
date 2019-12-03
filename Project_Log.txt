@@ -25,3 +25,6 @@ This morning I got two esp32's talking via CAN using SN65HVD230 CAN module. I fo
 http://www.iotsharing.com/2017/09/how-to-use-arduino-esp32-can-interface.html
 This tutorial sends over a lowercase string from one can to another.. this can then interprets the string and converts it to uppercase and then 
 sends it back.
+
+03/12/2019 week 49:
+Next week are project demos. My demo will be simple just demonstrating where i am currently and a plan as to where id like to be in the coming months.
