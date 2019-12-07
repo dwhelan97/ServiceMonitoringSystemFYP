@@ -30,15 +30,37 @@ void loop() {
       if(rx_frame.FIR.B.RTR==CAN_RTR)
         printf(" RTR from 0x%08x, DLC %d\r\n",rx_frame.MsgID,  rx_frame.FIR.B.DLC);
       else{
-        printf(" from 0x%08x, DLC %d\n",rx_frame.MsgID,  rx_frame.FIR.B.DLC);
-        /* convert to upper case and respond to sender */
-        for(int i = 0; i < 8; i++){
-          if(rx_frame.data.u8[i] >= 'a' && rx_frame.data.u8[i] <= 'z'){
-            rx_frame.data.u8[i] = rx_frame.data.u8[i] - 32;
+//        for(int i = 0; i < 1; i++){
+          printf(" from 0x%08x, DLC %d\n",rx_frame.MsgID,  rx_frame.FIR.B.DLC);        //  for(int i = 0; i < 1; i++){
+//          printf("Bale Weight is: %d", rx_frame.data.u8[i]);
+          int val =1;
+          for(int i = 0; i < 2; i++){
+            val = val*rx_frame.data.u8[i];
           }
+          printf("Bale Weight Value is : %i",val);
+         
         }
       }
-      //respond to sender
-      ESP32Can.CANWriteFrame(&rx_frame);
+    
+else{
+      //Send message to ISO CAN terminal
+    CAN_frame_t tx_frame;
+    tx_frame.FIR.B.FF = CAN_frame_ext;
+    tx_frame.MsgID = 0x19FF5003;
+    tx_frame.FIR.B.DLC = 1;
+//    tx_frame.FIR.B.DLC = 8;
+    tx_frame.data.u8[0] = 0x03; // Get bail weight
+    Serial.print("Sending 0x03");
+//      tx_frame.data.u8[0] = 'h';
+//      tx_frame.data.u8[1] = 'e';
+//      tx_frame.data.u8[2] = 'l';
+//      tx_frame.data.u8[3] = 'l';
+//      tx_frame.data.u8[4] = 'o';
+//      tx_frame.data.u8[5] = 'c';
+//      tx_frame.data.u8[6] = 'a';
+//      tx_frame.data.u8[7] = 'n';
+
+    ESP32Can.CANWriteFrame(&tx_frame);
     }
+    delay(5000);
 }
