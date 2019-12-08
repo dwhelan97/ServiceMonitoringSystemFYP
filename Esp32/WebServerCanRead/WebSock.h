@@ -82,20 +82,10 @@ void wsLoop(){
               //printf("The Bale Weight From Function is: %i",k);
               w = k;
               BaleState = "on";
-              //digitalWrite(output26, HIGH);
             } else if (header.indexOf("GET /26/off") >= 0) {
               Serial.println("GPIO 26 off");
               BaleState = "off";
-              //digitalWrite(output26, LOW);
-            } else if (header.indexOf("GET /27/on") >= 0) {
-              Serial.println("GPIO 27 on");
-              output27State = "on";
-              //digitalWrite(output27, HIGH);
-            } else if (header.indexOf("GET /27/off") >= 0) {
-              Serial.println("GPIO 27 off");
-              output27State = "off";
-              //digitalWrite(output27, LOW);
-            }
+            } 
             
             // Display the HTML web page
             client.println("<!DOCTYPE html><html>");
@@ -110,25 +100,14 @@ void wsLoop(){
             
             // Web Page Heading
             client.println("<body><h1>Service Monitoring System</h1>");
-            
-            // Display current state, and ON/OFF buttons for GPIO 26  
             client.println("<p>BaleWeight  - State " + BaleState + "</p>");
             // If the output26State is off, it displays the ON button       
             if (BaleState=="off") {
               client.println("<p><a href=\"/26/on\"><button class=\"button\">Click to search last bale weight</button></a></p>");
             } else {
-              client.printf("<p><a href=\"/26/off\"><button class=\"button button2\">%iKg</button></a></p>",w);
+              client.printf("<p><a href=\"/26/off\"><button class=\"button button2\">%iKg\nClick to close</button></a></p>",w);
               printf("The Bale Weight is: %i",w);
             } 
-               
-            // Display current state, and ON/OFF buttons for GPIO 27  
-            client.println("<p>GPIO 27 - State " + output27State + "</p>");
-            // If the output27State is off, it displays the ON button       
-            if (output27State=="off") {
-              client.println("<p><a href=\"/27/on\"><button class=\"button\">ON</button></a></p>");
-            } else {
-              client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
-            }
             client.println("</body></html>");
             
             // The HTTP response ends with another blank line
@@ -168,17 +147,8 @@ int SendandReceiveBaleInfo(){
 //    tx_frame.FIR.B.DLC = 8;
     tx_frame.data.u8[0] = 0x03; // Get bail weight
     Serial.print("Sending 0x03");
-//      tx_frame.data.u8[0] = 'h';
-//      tx_frame.data.u8[1] = 'e';
-//      tx_frame.data.u8[2] = 'l';
-//      tx_frame.data.u8[3] = 'l';
-//      tx_frame.data.u8[4] = 'o';
-//      tx_frame.data.u8[5] = 'c';
-//      tx_frame.data.u8[6] = 'a';
-//      tx_frame.data.u8[7] = 'n';
-
     ESP32Can.CANWriteFrame(&tx_frame);
-    delay(5000);
+    //delay(5000);
 
     while(1){
           CAN_frame_t rx_frame;
