@@ -29,3 +29,6 @@ sends it back.
 03/12/2019 week 49:
 Next week are project demos. My demo will be simple just demonstrating where i am currently and a plan as to where id like to be in the coming months.
 I had a call wih Aodhán last week where I updated him on the status of my project.
+
+08/12/2019 wek 50:
+I will present my project on Monday morning. The last number of days I have spent more time working on it as other classes are now complete. As of today I have a Webserver which displays a button to send and receive between esp's over CAN.
