@@ -5,8 +5,8 @@
 #include "scopeLam.h"
 #include "page2.h"
 
-const char* ssid     = "di";
-const char* password = "12345678";
+const char* ssid     = "House Fellas";
+const char* password = "27Ballybrit";
 WebServer server(80);   //instantiate server at port 80 (http port)
 
 void wsSetup(){
