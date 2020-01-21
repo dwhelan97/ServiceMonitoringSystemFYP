@@ -140,7 +140,7 @@ int SendandReceiveBaleInfo(){
     //initialize CAN Module
     ESP32Can.CANInit();
     int val;
-
+//Mchale Visit
     //Send message to ISO CAN terminal
     CAN_frame_t tx_frame;
     tx_frame.FIR.B.FF = CAN_frame_ext;
@@ -181,7 +181,7 @@ int SendandReceiveBaleInfo(){
     ESP32Can.CANWriteFrame(&tx_frame);
     Serial.println("Sending 0x01 to ECU");
     delay(10000);
-
+//Mchale Visit
     while(1){
           CAN_frame_t rx_frame;
     //receive next CAN frame from queue
