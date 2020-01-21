@@ -52,6 +52,7 @@ else{*/
     tx_frame.FIR.B.DLC = 8;
     //tx_frame.data.u8[0] = 0x03; // Get bail weight
     //Serial.print("Sending 0x03");
+    //Mchale Visit 
     tx_frame.data.u8[0] = 0x60;
     tx_frame.data.u8[1] = 0x00;
       tx_frame.data.u8[2] = 0x00;
@@ -83,5 +84,6 @@ else{*/
     ESP32Can.CANWriteFrame(&tx_frame);
     Serial.println("Sending 0x01 to ECU");
     delay(5000);
+    //Mchale Visit
 //}
 }
