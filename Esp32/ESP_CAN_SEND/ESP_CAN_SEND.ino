@@ -1,4 +1,4 @@
-#include <CAN.h>
+#include <CAN.h>//CAN Libraries
 #include <CAN_config.h>
 #include <can_regdef.h>
 #include <ESP32CAN.h>
@@ -10,7 +10,7 @@ int randNumber;
 
 void setup() {
     Serial.begin(115200);
-    CAN_cfg.speed=CAN_SPEED_1000KBPS;
+    CAN_cfg.speed=CAN_SPEED_250KBPS;
     CAN_cfg.tx_pin_id = GPIO_NUM_5;
     CAN_cfg.rx_pin_id = GPIO_NUM_4;
     CAN_cfg.rx_queue = xQueueCreate(10,sizeof(CAN_frame_t));
@@ -46,14 +46,16 @@ Serial.println(incomingByte);
 if(rx_frame.data.u8[0] = '0x03'){
   printf("Bale Weight Wanted\r\n");
   randNumber = random(40,80);
-  //Serial.print(randNumber);
-  //Serial.println("Kg");
   rx_frame.data.u8;
   rx_frame.FIR.B.FF = CAN_frame_ext;
   rx_frame.MsgID = 0x19FF5102;
   rx_frame.FIR.B.DLC = 2;
   rx_frame.data.u8[0] = randNumber;
   rx_frame.data.u8[1] = 10;
+  // Example
+  //data.u8[0] = randNumber & 0xFF;
+  //data.u8[1] = (randNumber >> 8) & 0xFF;
+  // end
   ESP32Can.CANWriteFrame(&rx_frame);
   int val =1;
   for(int i = 0; i < 2; i++){

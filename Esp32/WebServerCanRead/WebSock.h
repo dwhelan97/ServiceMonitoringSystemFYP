@@ -13,8 +13,8 @@
 CAN_device_t CAN_cfg;
 
 // Replace with your network credentials
-const char* ssid     = "House Fellas";
-const char* password = "27Ballybrit";
+const char* ssid     = "di";
+const char* password = "12345678";
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -103,9 +103,11 @@ void wsLoop(){
             client.println("<p>BaleWeight  - State " + BaleState + "</p>");
             // If the output26State is off, it displays the ON button       
             if (BaleState=="off") {
-              client.println("<p><a href=\"/26/on\"><button class=\"button\">Click to search last bale weight</button></a></p>");
+              //client.println("<p><a href=\"/26/on\"><button class=\"button\">Click to search last bale weight</button></a></p>");
+              client.println("<p><a href=\"/26/on\"><button class=\"button\">Click to send to ECU</button></a></p>");
             } else {
-              client.printf("<p><a href=\"/26/off\"><button class=\"button button2\">%iKg\nClick to close</button></a></p>",w);
+              //client.printf("<p><a href=\"/26/off\"><button class=\"button button2\">%iKg\nClick to close</button></a></p>",w);
+              client.printf("<p><a href=\"/26/off\"><button class=\"button button2\">\nClick to close</button></a></p>");
               printf("The Bale Weight is: %i",w);
             } 
             client.println("</body></html>");
@@ -131,7 +133,7 @@ void wsLoop(){
   }
 }
 int SendandReceiveBaleInfo(){
-    CAN_cfg.speed=CAN_SPEED_1000KBPS;
+    CAN_cfg.speed=CAN_SPEED_250KBPS;
     CAN_cfg.tx_pin_id = GPIO_NUM_5;
     CAN_cfg.rx_pin_id = GPIO_NUM_4;
     CAN_cfg.rx_queue = xQueueCreate(10,sizeof(CAN_frame_t));
@@ -142,13 +144,43 @@ int SendandReceiveBaleInfo(){
     //Send message to ISO CAN terminal
     CAN_frame_t tx_frame;
     tx_frame.FIR.B.FF = CAN_frame_ext;
-    tx_frame.MsgID = 0x19FF5003;
-    tx_frame.FIR.B.DLC = 1;
-//    tx_frame.FIR.B.DLC = 8;
-    tx_frame.data.u8[0] = 0x03; // Get bail weight
-    Serial.print("Sending 0x03");
+    //tx_frame.MsgID = 0x19FF5003;
+    tx_frame.MsgID = 0x1CEF0102;
+    //tx_frame.FIR.B.DLC = 1;
+    tx_frame.FIR.B.DLC = 8;
+    //tx_frame.data.u8[0] = 0x03; // Get bail weight
+    //Serial.print("Sending 0x03");
+    tx_frame.data.u8[0] = 60;
+    tx_frame.data.u8[1] = 0x00;
+      tx_frame.data.u8[2] = 0x00;
+      tx_frame.data.u8[3] = 0x00;
+      tx_frame.data.u8[4] = 0x00;
+      tx_frame.data.u8[5] = 0x00;
+      tx_frame.data.u8[6] = 0x00;
+      tx_frame.data.u8[7] = 0xFF;
     ESP32Can.CANWriteFrame(&tx_frame);
-    //delay(5000);
+    Serial.println("Sending 0x00 to ECU");
+    delay(10000);
+    //Send message to ISO CAN terminal
+   // CAN_frame_t tx_frame;
+    //tx_frame.FIR.B.FF = CAN_frame_ext;
+    //tx_frame.MsgID = 0x19FF5003;
+    tx_frame.MsgID = 0x1CEF0102;
+    //tx_frame.FIR.B.DLC = 1;
+    tx_frame.FIR.B.DLC = 8;
+    //tx_frame.data.u8[0] = 0x03; // Get bail weight
+    //Serial.print("Sending 0x03");
+    tx_frame.data.u8[0] = 60;
+    tx_frame.data.u8[1] = 0x01;
+      tx_frame.data.u8[2] = 0x00;
+      tx_frame.data.u8[3] = 0x00;
+      tx_frame.data.u8[4] = 0x00;
+      tx_frame.data.u8[5] = 0x00;
+      tx_frame.data.u8[6] = 0x00;
+      tx_frame.data.u8[7] = 0xFF;
+    ESP32Can.CANWriteFrame(&tx_frame);
+    Serial.println("Sending 0x01 to ECU");
+    delay(10000);
 
     while(1){
           CAN_frame_t rx_frame;
