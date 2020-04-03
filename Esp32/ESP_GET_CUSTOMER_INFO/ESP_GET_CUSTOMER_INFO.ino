@@ -26,44 +26,49 @@ void loop() {
         printf("New standard frame\n");
       }
       else {
-        printf("New extended frame\n");
+        printf("New extended frame ");
       }
       if (rx_frame.FIR.B.RTR == CAN_RTR) {
         printf(" RTR from 0x%08x, DLC %d\r\n", rx_frame.MsgID,  rx_frame.FIR.B.DLC);
       }
       else {
-        //        for(int i = 0; i < 1; i++){
-        printf(" from 0x%08x, DLC %d\n", rx_frame.MsgID,  rx_frame.FIR.B.DLC);
-        for (int i = 0; i <= 8; i++) {
-          printf(".Received Data is: %d\n", rx_frame.data.u8[i]);
-
+        printf("from 0x%08x, DLC %d\n", rx_frame.MsgID,  rx_frame.FIR.B.DLC);
+        if (rx_frame.data.u8[0] == 0 && rx_frame.data.u8[1] == 0) {
+          int NumberOfActiveJobs = rx_frame.data.u8[2];
+          Serial.println("Number of Active Jobs:" + (String)NumberOfActiveJobs);
+          for (int i = 0; i <= 7; i++) {
+            Serial.print(rx_frame.data.u8[i], HEX);
+          }
+          Serial.print("\n");
+        }
+        else {
+          for (int i = 0; i <= 7; i++) {
+            Serial.print(rx_frame.data.u8[i], HEX);
+          }
+          Serial.print("\n");
         }
       }
     }
-    else {
-      Serial.print("Not What You Want\n");
-    }
   }
-
   else {
-    //Send message to ISO CAN terminal
-    CAN_frame_t tx_frame;
-    tx_frame.FIR.B.FF = CAN_frame_ext;
-    tx_frame.MsgID = 0x19FF5003;
-    //tx_frame.MsgID = 0x1CEF0102;
-    //tx_frame.FIR.B.DLC = 1;
-    tx_frame.FIR.B.DLC = 8;
-    //tx_frame.data.u8[0] = 0x03; // Get bail weight
-    //Serial.print("Sending 0x03");
-    tx_frame.data.u8[0] = 0x00;
-    tx_frame.data.u8[1] = 0xFF;
-    tx_frame.data.u8[2] = 0xFF;
-    tx_frame.data.u8[3] = 0xFF;
-    tx_frame.data.u8[4] = 0xFF;
-    tx_frame.data.u8[5] = 0xFF;
-    tx_frame.data.u8[6] = 0xFF;
-    tx_frame.data.u8[7] = 0xFF;
-    ESP32Can.CANWriteFrame(&tx_frame);
-    Serial.println("Sending 0x00 to ECU");
+    RequestActiveJobs();
   }
+}
+
+void RequestActiveJobs() {
+  //Send message to ISO CAN terminal
+  CAN_frame_t tx_frame;
+  tx_frame.FIR.B.FF = CAN_frame_ext;
+  tx_frame.MsgID = 0x19FF5003;
+  tx_frame.FIR.B.DLC = 8;
+  tx_frame.data.u8[0] = 0x00;
+  tx_frame.data.u8[1] = 0xFF;
+  tx_frame.data.u8[2] = 0xFF;
+  tx_frame.data.u8[3] = 0xFF;
+  tx_frame.data.u8[4] = 0xFF;
+  tx_frame.data.u8[5] = 0xFF;
+  tx_frame.data.u8[6] = 0xFF;
+  tx_frame.data.u8[7] = 0xFF;
+  ESP32Can.CANWriteFrame(&tx_frame);
+  Serial.println("Sending 0x00 to ECU");
 }
