@@ -16,14 +16,15 @@ void setup() {
   //initialize CAN Module
   ESP32Can.CANInit();
 }
-
+String ReturnedJobInfo("");
 void loop() {
   CAN_frame_t rx_frame;
   //receive next CAN frame from queue
   if (xQueueReceive(CAN_cfg.rx_queue, &rx_frame, 3 * portTICK_PERIOD_MS) == pdTRUE) {
-//    if (rx_frame.MsgID == 0x19FF5102) {//If a message from this message id comes over CAN then do something with it if its anything else dont bother
-//    if (rx_frame.MsgID == 0x19FF5302) {
-      if (rx_frame.MsgID == 0x19FF5202) {
+    //    if (rx_frame.MsgID == 0x19FF5102) {//brings back number of active jobs first and then a list containing each JobNumber,CustomerID,JobID
+    //    if (rx_frame.MsgID == 0x19FF5302) {
+       if (rx_frame.MsgID == 0x19FF5202) {//gives back customer name ending in \0
+   // if (rx_frame.MsgID == 0x19FF5302) {
       if (rx_frame.FIR.B.FF == CAN_frame_std) {
         printf("New standard frame\n");
       }
@@ -35,6 +36,19 @@ void loop() {
       }
       else {
         printf("from 0x%08x, DLC %d\n", rx_frame.MsgID,  rx_frame.FIR.B.DLC);
+        if (rx_frame.data.u8[0] == 0 && rx_frame.data.u8[1] == 5) {
+            for (int i = 2; i <= 7; i++) {
+              if(rx_frame.data.u8[i] != 0){
+             //Serial.print((char)rx_frame.data.u8[i]);
+              ReturnedJobInfo = ReturnedJobInfo + (char)rx_frame.data.u8[i];
+              }else{
+                Serial.print(ReturnedJobInfo);
+                ReturnedJobInfo = "";
+                break ;
+              }
+            }
+            Serial.print("\n");
+        }
         if (rx_frame.data.u8[0] == 0 && rx_frame.data.u8[1] == 0) {
           int NumberOfActiveJobs = rx_frame.data.u8[2];
           Serial.println("Number of Active Jobs:" + (String)NumberOfActiveJobs);
@@ -44,18 +58,20 @@ void loop() {
           Serial.print("\n");
         }
         else {
+
           for (int i = 0; i <= 7; i++) {
-            Serial.print(rx_frame.data.u8[i], HEX);
+            Serial.print(rx_frame.data.u8[i],HEX);
           }
           Serial.print("\n");
         }
-      }
+        
     }
   }
-  else {
-    //RequestActiveJobs();
-    //RequestJobInfo();
-    RequestCustName();
+}
+else {
+  RequestActiveJobs();
+ // RequestJobInfo();
+   // RequestCustName();
   }
 }
 
